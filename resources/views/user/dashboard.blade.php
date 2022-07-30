@@ -3,7 +3,7 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <h2>Borrowed Books</h2>
+    <h2>{{ __('app.Borrowed Books') }}</h2>
     <div class="row">
         @forelse ($books as $book)
             <div class="col-md-6 col-lg-4 my-2">
@@ -31,7 +31,7 @@
         @endforelse
     </div>
     <hr>
-    <h2>Pending Orders</h2>
+    <h2>{{ __('app.pending-orders') }}</h2>
     <div class="row">
         @forelse ($pendingOrders as $book)
             <div class="col-md-6 col-lg-4 my-2">

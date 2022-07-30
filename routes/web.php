@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +50,10 @@ Route::middleware('auth')->group(function () {
 
         Route::name('admin.')->prefix('/admin')->group(function () {
             Route::get('', [AdminController::class, 'showPanel'])->name('panel');
+        });
+
+        Route::name('tag.')->prefix('/tag')->group(function () {
+            Route::post('create', [TagController::class, 'create'])->name('create');
         });
     });
 });

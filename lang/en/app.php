@@ -41,5 +41,8 @@ return [
     'reverse' => 'Reverse',
     'dashboard' => 'Borrowed Books',
     'order-sent' => 'The order has been successfuly sent.',
-    'pending-book' => 'There is no pending orders yet.'
+    'pending-book' => 'There is no pending orders yet.',
+    'required' => 'Required',
+    'add-tag' => 'Add New Tag',
+    'Borrowed Books' => 'Borrowed Books'
 ];
