@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewOrderEvent;
+use App\Events\OrderStatusChanged;
 use App\Models\Order;
 
 class OrderController extends Controller
@@ -11,6 +13,8 @@ class OrderController extends Controller
         auth()->user()->books()->attach($book, ['type' => 'borrow']);
 
         session()->flash('success', 'The order has been sended.');
+
+        NewOrderEvent::dispatch();
 
         return back();
     }
@@ -27,6 +31,9 @@ class OrderController extends Controller
 
         session()->flash('success', 'The order has been sended.');
 
+        NewOrderEvent::dispatch();
+
+
         return back();
     }
 
@@ -34,6 +41,8 @@ class OrderController extends Controller
     {
         $order->status = 'accepted';
         $order->save();
+
+        OrderStatusChanged::dispatch($order);
 
         return back();
     }
@@ -54,6 +63,8 @@ class OrderController extends Controller
         $order->status = 'reversed';
         $order->save();
 
+        OrderStatusChanged::dispatch($order);
+
         return back();
     }
 
@@ -61,6 +72,9 @@ class OrderController extends Controller
     {
         $order->status = 'refused';
         $order->save();
+
+        OrderStatusChanged::dispatch($order);
+
 
         return back();
     }

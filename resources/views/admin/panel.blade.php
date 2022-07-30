@@ -57,3 +57,12 @@
         </div>
     </div>
 @endsection
+
+@section('script')
+    <script defer>
+        window.Echo.channel(`new-order`)
+            .listen('NewOrderEvent', (e) => {
+                location.reload();
+            });
+    </script>
+@endsection
