@@ -15,7 +15,7 @@ class BookController extends Controller
         $books = [];
         if (request()->tag) {
             $tag = Tag::where('name', request()->tag)->first();
-            $books = $tag->books()->latest()->paginate(9)->withQueryString();
+            $books = $tag->books()->with(['images', 'tags'])->latest()->paginate(9)->withQueryString();
         } else {
             $books = Book::with(['images', 'tags'])->latest()->paginate(9);
         }
@@ -25,7 +25,6 @@ class BookController extends Controller
 
     public function show(Book $book)
     {
-        // dd(app()->getLocale());
         return view('books.show', compact('book'));
     }
 

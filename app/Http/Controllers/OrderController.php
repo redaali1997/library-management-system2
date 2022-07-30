@@ -22,6 +22,9 @@ class OrderController extends Controller
     public function delete($book)
     {
         auth()->user()->getLastOrder($book, 'pending')->delete();
+
+        NewOrderEvent::dispatch();
+
         return back();
     }
 

@@ -70,13 +70,15 @@
 @endsection
 
 @section('script')
-    @if (auth()->user()->getLastOrder($book->id, 'pending'))
-        <script defer>
-            let orderId = {{ auth()->user()->getLastOrder($book->id, 'pending')->id }}
-            window.Echo.channel(`orders.${orderId}`)
-                .listen('OrderStatusChanged', (e) => {
-                    location.reload();
-                });
-        </script>
-    @endif
+    @auth
+        @if (auth()->user()->getLastOrder($book->id, 'pending'))
+            <script defer>
+                let orderId = {{ auth()->user()->getLastOrder($book->id, 'pending')->id }}
+                window.Echo.channel(`orders.${orderId}`)
+                    .listen('OrderStatusChanged', (e) => {
+                        location.reload();
+                    });
+            </script>
+        @endif
+    @endauth
 @endsection
