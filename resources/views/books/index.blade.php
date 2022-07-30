@@ -8,9 +8,9 @@
             {{ session('message') }}
         </div>
     @endif
-    <div class="d-flex justify-content-between flex-wrap">
+    <div class="row">
         @forelse ($books as $book)
-            <div class="my-2">
+            <div class="col-md-6 col-lg-4 my-2">
                 <div class="card" style="width: 18rem;">
                     @if (count($book->images))
                         <img src="{{ $book->images()->first()->path }}" class="card-img-top" alt="{{ $book->title }}">
@@ -33,5 +33,8 @@
         @empty
             <h4>{{ __('app.empty-book') }}</h4>
         @endforelse
+        <div class="text-center">
+            {{ $books->links() }}
+        </div>
     </div>
 @endsection

@@ -15,9 +15,9 @@ class BookController extends Controller
         $books = [];
         if (request()->tag) {
             $tag = Tag::where('name', request()->tag)->first();
-            $books = $tag->books()->latest()->get();
+            $books = $tag->books()->latest()->paginate(9)->withQueryString();
         } else {
-            $books = Book::with(['images', 'tags'])->latest()->get();
+            $books = Book::with(['images', 'tags'])->latest()->paginate(9);
         }
 
         return view('books.index', compact('books'));

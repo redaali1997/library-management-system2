@@ -9,7 +9,11 @@ class UserController extends Controller
     public function dashboard()
     {
         $books = auth()->user()->books()->wherePivot('status', 'accepted')->get();
+        $pendingOrders = auth()->user()->books()
+            ->wherePivot('status', 'pending')
+            ->wherePivot('type', 'borrow')
+            ->get();
 
-        return view('user.dashboard', compact('books'));
+        return view('user.dashboard', compact('books', 'pendingOrders'));
     }
 }

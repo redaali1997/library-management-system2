@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BookUser;
-use Illuminate\Http\Request;
+use App\Models\Order;
 
 class AdminController extends Controller
 {
     public function showPanel()
     {
-        $pendingOrders = BookUser::where('status', 'pending')->get();
+        $pendingOrders = Order::where('status', 'pending')->get();
         return view('admin.panel', compact('pendingOrders'));
     }
 }

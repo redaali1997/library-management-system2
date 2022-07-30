@@ -69,7 +69,7 @@ class User extends Authenticatable
      */
     public function books()
     {
-        return $this->belongsToMany(Book::class)->withPivot(['status', 'type'])->withTimestamps();
+        return $this->belongsToMany(Book::class, 'orders')->withTimestamps();
     }
 
     public function isAdmin()
@@ -77,21 +77,16 @@ class User extends Authenticatable
         return $this->role->name == 'Admin';
     }
 
-    public function getLastOrder($book_id, $status = null, $type = null)
+    public function getLastOrder($book, $status = null, $type = null)
     {
-        if ($status && $type) {
-            return $this->books()->wherePivot('book_id', $book_id)->wherePivot('type', $type)->wherePivot('status', $status)->latest()->first();
+        if (!$status && !$type) {
+            return $this->orders()->where('book_id', $book)->latest()->first();
         } else if ($status && !$type) {
-            return $this->books()->wherePivot('book_id', $book_id)->wherePivot('status', $status)->latest()->first();
+            return $this->orders()->where('book_id', $book)->where('status', $status)->latest()->first();
         } else if (!$status && $type) {
-            return $this->books()->wherePivot('book_id', $book_id)->wherePivot('type', $type)->latest()->first();
+            return $this->orders()->where('book_id', $book)->where('type', $type)->latest()->first();
         } else {
-            return $this->books()->wherePivot('book_id', $book_id)->latest()->first();
+            return $this->orders()->where('book_id', $book)->where('type', $type)->where('status', $status)->latest()->first();
         }
-    }
-
-    public function lastOrder($book_id)
-    {
-        return $this->books()->wherePivot('book_id', $book_id)->latest()->first();
     }
 }

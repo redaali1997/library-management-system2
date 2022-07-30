@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BookUser;
+use App\Models\Order;
 
 class OrderController extends Controller
 {
@@ -10,26 +10,15 @@ class OrderController extends Controller
     {
         auth()->user()->books()->attach($book, ['type' => 'borrow']);
 
+        session()->flash('success', 'The order has been sended.');
+
         return back();
     }
 
     public function delete($book)
     {
-        $lastOrder = auth()->user()->getLastOrder($book, 'pending');
-        if ($lastOrder) {
-            if ($lastOrder->pivot->type == 'reverse') {
-                BookUser::where([
-                    'book_id' => $lastOrder->pivot->book_id,
-                    'user_id' => $lastOrder->pivot->user_id,
-                    'type' => 'reverse',
-                    'status' => 'pending'
-                ])->delete();
-            } else {
-                auth()->user()->books()->detach($book);
-            }
-
-            return back();
-        }
+        auth()->user()->getLastOrder($book, 'pending')->delete();
+        return back();
     }
 
     public function reverse($book)
@@ -41,36 +30,37 @@ class OrderController extends Controller
         return back();
     }
 
-    public function accept(BookUser $order)
+    public function accept(Order $order)
     {
-        $order->update([
-            'status' => 'accepted'
-        ]);
+        $order->status = 'accepted';
+        $order->save();
+
         return back();
     }
 
-    public function confirm(BookUser $order)
+    public function confirm(Order $order)
     {
-        $previousOrder = BookUser::where([
-            'book_id' => $order->book_id,
-            'user_id' => $order->user_id,
-            'status' => 'accepted'
-        ])->latest()->first();
-        $previousOrder->update([
-            'status' => 'reversed'
-        ]);
+        // get accepted borrow order
+        $previosOrder = Order::where('book_id', $order->book_id)
+            ->where('user_id', $order->user_id)
+            ->where('status', 'accepted')
+            ->first();
 
-        $order->update([
-            'status' => 'reversed'
-        ]);
+        // change borrow order status
+        $previosOrder->status = 'reversed';
+        $previosOrder->save();
+
+        // change reverse order status
+        $order->status = 'reversed';
+        $order->save();
+
         return back();
     }
 
-    public function refuse(BookUser $order)
+    public function refuse(Order $order)
     {
-        $order->update([
-            'status' => 'refused'
-        ]);
+        $order->status = 'refused';
+        $order->save();
 
         return back();
     }

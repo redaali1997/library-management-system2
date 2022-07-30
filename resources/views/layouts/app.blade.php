@@ -46,6 +46,13 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('dashboard') }}">{{ __('app.dashboard') }}</a>
                             </li>
+                            @if (auth()->user()->isAdmin())
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.panel') }}">
+                                        {{ __('app.admin-panel') }}
+                                    </a>
+                                </li>
+                            @endif
                         @endauth
                     </ul>
 
@@ -84,11 +91,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    @if (auth()->user()->isAdmin())
-                                        <a class="dropdown-item" href="{{ route('admin.panel') }}">
-                                            {{ __('app.admin-panel') }}
-                                        </a>
-                                    @endif
+
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();

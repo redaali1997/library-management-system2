@@ -31,11 +31,21 @@ class Book extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'orders');
     }
 
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'book_tag');
+    }
+
+    /**
+     * Get all of the orders for the Book
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

@@ -15,6 +15,10 @@ class BookSeeder extends Seeder
      */
     public function run()
     {
-        Book::factory(20)->hasImages(3)->create();
+        $books = Book::factory(50)->hasImages(3)->create();
+
+        $books->map(function ($book) {
+            $book->tags()->attach([rand(1, 6), rand(1, 6)]);
+        });
     }
 }

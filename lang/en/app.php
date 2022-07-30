@@ -39,6 +39,7 @@ return [
     'refuse' => 'Refuse',
     'borrow' => 'Borrow',
     'reverse' => 'Reverse',
-    'dashboard' => 'Dashboard',
-    'order-sent' => 'The order has been successfuly sent.'
+    'dashboard' => 'Borrowed Books',
+    'order-sent' => 'The order has been successfuly sent.',
+    'pending-book' => 'There is no pending orders yet.'
 ];
