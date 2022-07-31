@@ -24,9 +24,9 @@
                                     target="_blank">{{ $order->book->title }}</a>
                             </td>
                             <td>{{ $order->user->name }}</td>
-                            <td>{{ __('app.' . $order->type) }}</td>
+                            <td>{{ __('app.' . $order->type->title) }}</td>
                             <td>
-                                @if ($order->type == 'reverse')
+                                @if ($order->type_id == $reverseType->id)
                                     <form action="{{ route('order.confirm', $order->id) }}" method="post">
                                         @csrf
                                         @method('PUT')

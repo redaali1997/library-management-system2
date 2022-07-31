@@ -79,14 +79,19 @@ class User extends Authenticatable
 
     public function getLastOrder($book, $status = null, $type = null)
     {
+
         if (!$status && !$type) {
             return $this->orders()->where('book_id', $book)->latest()->first();
         } else if ($status && !$type) {
-            return $this->orders()->where('book_id', $book)->where('status', $status)->latest()->first();
+            $status_id = Status::where('title', $status)->first()->id;
+            return $this->orders()->where('book_id', $book)->where('status_id', $status_id)->latest()->first();
         } else if (!$status && $type) {
-            return $this->orders()->where('book_id', $book)->where('type', $type)->latest()->first();
+            $type_id = Type::where('title', $type)->first()->id;
+            return $this->orders()->where('book_id', $book)->where('type_id', $type_id)->latest()->first();
         } else {
-            return $this->orders()->where('book_id', $book)->where('type', $type)->where('status', $status)->latest()->first();
+            $status_id = Status::where('title', $status)->first()->id;
+            $type_id = Type::where('title', $type)->first()->id;
+            return $this->orders()->where('book_id', $book)->where('type_id', $type_id)->where('status_id', $status_id)->latest()->first();
         }
     }
 }
