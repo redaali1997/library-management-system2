@@ -47,13 +47,13 @@
                 </div>
             @endif
             @auth
-                @if (auth()->user()->getLastOrder($book->id, 'pending'))
+                @if (auth()->user()->getLastOrder($book->id, 1))
                     <form action="{{ route('order.delete', $book->id) }}" method="post">
                         @csrf
                         @method('DELETE')
                         <input type="submit" class="btn btn-danger" style="width: 100%" value="{{ __('app.cancel-order') }}">
                     </form>
-                @elseif(auth()->user()->getLastOrder($book->id, 'accepted', 'borrow'))
+                @elseif(auth()->user()->getLastOrder($book->id, 2, 1))
                     <form action="{{ route('order.reverse', $book->id) }}" method="post">
                         @csrf
                         <input type="submit" class="btn btn-dark" style="width: 100%" value="{{ __('app.reverse-book') }}">
@@ -71,9 +71,9 @@
 
 @section('script')
     @auth
-        @if (auth()->user()->getLastOrder($book->id, 'pending'))
+        @if (auth()->user()->getLastOrder($book->id, 1))
             <script defer>
-                let orderId = {{ auth()->user()->getLastOrder($book->id, 'pending')->id }}
+                let orderId = {{ auth()->user()->getLastOrder($book->id, 1)->id }}
                 window.Echo.channel(`orders.${orderId}`)
                     .listen('OrderStatusChanged', (e) => {
                         location.reload();

@@ -9,6 +9,12 @@ class Status extends Model
 {
     use HasFactory;
 
+    public const PENDING = 1;
+    public const ACCEPTED = 2;
+    public const REVERSED = 3;
+    public const REFUSED = 4;
+
+
     /**
      * Get all of the orders for the Status
      *

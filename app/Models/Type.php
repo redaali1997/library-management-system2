@@ -9,6 +9,9 @@ class Type extends Model
 {
     use HasFactory;
 
+    public const BORROW = 1;
+    public const REVERSE = 2;
+
     /**
      * Get all of the orders for the Type
      *

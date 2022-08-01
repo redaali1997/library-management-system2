@@ -83,15 +83,11 @@ class User extends Authenticatable
         if (!$status && !$type) {
             return $this->orders()->where('book_id', $book)->latest()->first();
         } else if ($status && !$type) {
-            $status_id = Status::where('title', $status)->first()->id;
-            return $this->orders()->where('book_id', $book)->where('status_id', $status_id)->latest()->first();
+            return $this->orders()->where('book_id', $book)->where('status_id', $status)->latest()->first();
         } else if (!$status && $type) {
-            $type_id = Type::where('title', $type)->first()->id;
-            return $this->orders()->where('book_id', $book)->where('type_id', $type_id)->latest()->first();
+            return $this->orders()->where('book_id', $book)->where('type_id', $type)->latest()->first();
         } else {
-            $status_id = Status::where('title', $status)->first()->id;
-            $type_id = Type::where('title', $type)->first()->id;
-            return $this->orders()->where('book_id', $book)->where('type_id', $type_id)->where('status_id', $status_id)->latest()->first();
+            return $this->orders()->where('book_id', $book)->where('type_id', $type)->where('status_id', $status)->latest()->first();
         }
     }
 }

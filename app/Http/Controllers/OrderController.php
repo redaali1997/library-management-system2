@@ -12,8 +12,7 @@ class OrderController extends Controller
 {
     public function create($book)
     {
-        $type = Type::where('title', 'borrow')->select('id')->first()->id;
-        auth()->user()->books()->attach($book, ['type_id' => $type]);
+        auth()->user()->books()->attach($book, ['type_id' => Type::BORROW]);
 
         session()->flash('success', 'The order has been sended.');
 
@@ -24,7 +23,7 @@ class OrderController extends Controller
 
     public function delete($book)
     {
-        auth()->user()->getLastOrder($book, 'pending')->delete();
+        auth()->user()->getLastOrder($book, Status::PENDING)->delete();
 
         NewOrderEvent::dispatch();
 
@@ -33,9 +32,8 @@ class OrderController extends Controller
 
     public function reverse($book)
     {
-        $type = Type::where('title', 'reverse')->select('id')->first()->id;
 
-        auth()->user()->books()->attach($book, ['type_id' => $type]);
+        auth()->user()->books()->attach($book, ['type_id' => Type::REVERSE]);
 
         session()->flash('success', 'The order has been sended.');
 
@@ -49,7 +47,7 @@ class OrderController extends Controller
     {
         $status = Status::where('title', 'accepted')->select('id')->first()->id;
 
-        $order->status_id = $status;
+        $order->status_id = Status::ACCEPTED;
         $order->save();
 
         OrderStatusChanged::dispatch($order);
@@ -60,22 +58,18 @@ class OrderController extends Controller
     public function confirm(Order $order)
     {
 
-        $acceptedStatus = Status::where('title', 'accepted')->select('id')->first();
-        $reversedStatus = Status::where('title', 'reversed')->select('id')->first();
-
-
         // get accepted borrow order
         $previosOrder = Order::where('book_id', $order->book_id)
             ->where('user_id', $order->user_id)
-            ->where('status_id', $acceptedStatus->id)
+            ->where('status_id', Status::ACCEPTED)
             ->first();
 
         // change borrow order status
-        $previosOrder->status_id = $reversedStatus->id;
+        $previosOrder->status_id = Status::REVERSED;
         $previosOrder->save();
 
         // change reverse order status
-        $order->status_id = $reversedStatus->id;
+        $order->status_id = Status::REVERSED;
         $order->save();
 
         OrderStatusChanged::dispatch($order);
@@ -85,9 +79,7 @@ class OrderController extends Controller
 
     public function refuse(Order $order)
     {
-        $refusedStatus = Status::where('title', 'refused')->select('id')->first();
-
-        $order->status_id = $refusedStatus->id;
+        $order->status_id = Status::REFUSED;
         $order->save();
 
         OrderStatusChanged::dispatch($order);
